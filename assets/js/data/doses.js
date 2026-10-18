@@ -31,7 +31,7 @@ window.NEG.data.doses = [
     value: 0.0001,
     unit: "mSv",
     icon: "🍌",
-    note: "香蕉富含钾-40，约 0.1 微西弗，相当于几分钟天然本底。"
+    note: "香蕉富含钾-40，约 0.1 微西弗，约相当于 20 分钟天然本底。"
   },
   {
     id: "airport-scan",
@@ -40,7 +40,7 @@ window.NEG.data.doses = [
     value: 0.0001,
     unit: "mSv",
     icon: "🛂",
-    note: "毫米波或背散射安检约 0.1 微西弗，剂量极低。"
+    note: "背散射 X 射线安检约 0.1 微西弗；毫米波安检属于非电离辐射，不产生电离剂量。"
   },
   {
     id: "flight-long",
@@ -114,7 +114,7 @@ window.NEG.data.doses = [
     value: 2,
     unit: "mSv",
     icon: "🧠",
-    note: "约 2 毫西弗，相当于约 8 个月的天然本底。"
+    note: "约 2 毫西弗，约相当于 10 个月的天然本底（按 2.4 毫西弗/年）。"
   },
   {
     id: "abdomen-ct",
@@ -152,16 +152,6 @@ window.NEG.data.doses = [
     icon: "🦴",
     note: "锝-99m 标记药物，约 4–6 毫西弗。"
   },
-  {
-    id: "radiotherapy",
-    name: "癌症放疗总量（分次累计）",
-    group: "medical",
-    value: 60000,
-    unit: "mSv",
-    icon: "🎯",
-    note: "约 60 戈瑞的局部靶区剂量，分 20–30 次照射累加；不是全身急性受照，不可与单次全身剂量直接比较。"
-  },
-
   /* ===== 天然本底 ===== */
   {
     id: "background-day",
@@ -183,12 +173,12 @@ window.NEG.data.doses = [
   },
   {
     id: "brazil-high-background",
-    name: "巴西高本底地区（年）",
+    name: "巴西瓜拉帕里高本底（局部，年）",
     group: "nature",
     value: 10,
     unit: "mSv",
     icon: "🏖️",
-    note: "瓜拉帕里等富钍海滨地区，约为全球平均的 4 倍，居民健康未见明确异常。"
+    note: "部分富钍海滨区域可达约 5–10 毫西弗/年，属局部高值；当地居民健康未见明确异常。"
   },
   {
     id: "ramsar-high-background",
@@ -221,21 +211,21 @@ window.NEG.data.doses = [
   },
   {
     id: "fukushima-worker",
-    name: "福岛事故现场工人（最高）",
+    name: "福岛事故应急作业人员（估算）",
     group: "work",
     value: 170,
     unit: "mSv",
     icon: "⚠️",
-    note: "应急作业中记录到的最高有效剂量约 170 毫西弗，属急性应急照射。"
+    note: "2011 年 3 月参与高放废水作业的部分人员估算有效剂量约 170–180 毫西弗；后续评估中个别应急人员累积剂量更高，均属应急照射，不属于正常运行工况。"
   },
   {
     id: "chernobyl-firefighter",
-    name: "切尔诺贝利消防员（最高）",
+    name: "切尔诺贝利消防员（首批典型）",
     group: "work",
     value: 10000,
     unit: "mSv",
     icon: "☢️",
-    note: "首批消防员受到约 10 戈瑞急性照射，部分人员在数周内死亡。"
+    note: "首批消防员受到约 2–16 戈瑞急性照射，10 戈瑞为代表性量级；部分人员在数周内死亡。"
   },
 
   /* ===== 航天与极端 ===== */

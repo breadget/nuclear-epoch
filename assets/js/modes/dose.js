@@ -30,9 +30,13 @@
     accent: '#a78bfa',
     blurb: '把香蕉、胸片、CT、职业限值和事故放在同一把对数标尺上。',
     progress(s) {
-      return Math.min(1, (s.modes.dose.viewed || []).length / 26);
+      const total = (NEG.data.doses || []).length || 25;
+      return Math.min(1, (s.modes.dose.viewed || []).length / total);
     },
-    isComplete(s) { return (s.modes.dose.viewed || []).length >= 26; },
+    isComplete(s) {
+      const total = (NEG.data.doses || []).length;
+      return total > 0 && (s.modes.dose.viewed || []).length >= total;
+    },
 
     render(root, ctx) {
       const { store, data, ui, audio, util: U } = ctx;
@@ -101,6 +105,10 @@
               '<div class="divider"></div>' +
               '<p class="explain-text"><strong class="text-cyan">非电离辐射</strong>：' + U.esc(intro.nonIonizing || '') + '</p>' +
               '<p class="explain-text" style="margin-top:8px"><strong class="text-amber">电离辐射</strong>：' + U.esc(intro.ionizing || '') + '</p>' +
+            '</section>' +
+            '<section class="panel panel-pad anim-fade-up d3">' +
+              '<div class="panel-head"><h3>' + NEG.icon('info') + '为什么放疗剂量不在图里？</h3></div>' +
+              '<p class="explain-text">横轴比较的是<strong>全身有效剂量（mSv）</strong>。癌症放疗的 60 Gy 是<strong>局部靶区吸收剂量</strong>（戈瑞），只作用于肿瘤区域、分次照射，不能换算成全身有效剂量，因此不混入同一把尺子。剂量类型和受照范围，与剂量数值同样重要。</p>' +
             '</section>' +
             '<section class="panel panel-pad anim-fade-up d3">' +
               '<div class="panel-head"><h3>' + NEG.icon('target') + '剂量换算器</h3></div>' +
