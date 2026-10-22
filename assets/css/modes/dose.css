@@ -9,10 +9,37 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) 330px;
   gap: 16px;
-  align-items: start;
+  /* 两栏等高:左栏跟随右栏的高度拉伸 */
+  align-items: stretch;
 }
 
-.dose-main { padding: 20px; }
+.dose-main {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+/* 列表保持自然高度、刻度轴贴到面板底部,余量落在图表区里 */
+.dose-main .dose-rows {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+/* 行随面板拉高而均匀变高,但设上限,避免筛选后出现巨大空隙 */
+.dose-main .dose-row {
+  flex: 1 1 auto;
+  max-height: 60px;
+}
+
+.dose-main .dose-axis {
+  margin-top: auto;
+}
+
+.dose-main .data-note {
+  margin-top: 10px;
+}
 
 .dose-toolbar {
   display: flex;

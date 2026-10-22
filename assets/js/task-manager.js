@@ -18,8 +18,8 @@ window.NEG = window.NEG || {};
     mountedAt: 0
   };
 
-  function normalize(def) {
-    if (!def || !def.id || typeof def.render !== 'function') return null;
+  function normalize(def, metadataOnly) {
+    if (!def || !def.id || (!metadataOnly && typeof def.render !== 'function')) return null;
     return {
       id: def.id,
       title: def.title || def.id,
@@ -28,7 +28,9 @@ window.NEG = window.NEG || {};
       order: typeof def.order === 'number' ? def.order : 999,
       blurb: def.blurb || '',
       accent: def.accent || 'cyan',
-      render: def.render,
+      /* hidden: 注册仍在、代码照跑,只是不出现在导航与首页入口 */
+      hidden: !!def.hidden,
+      render: typeof def.render === 'function' ? def.render : null,
       progress: typeof def.progress === 'function' ? def.progress : null,
       isComplete: typeof def.isComplete === 'function' ? def.isComplete : null,
       onMount: typeof def.onMount === 'function' ? def.onMount : null
@@ -36,6 +38,15 @@ window.NEG = window.NEG || {};
   }
 
   const TM = {
+    // Navigation and saved-progress summaries do not require loading a renderer.
+    define(def) {
+      if (tasks.some(item => item.id === def.id)) return TM.get(def.id);
+      const item = normalize(def, true);
+      if (!item) return null;
+      tasks.push(item);
+      tasks.sort((a, b) => a.order - b.order || a.id.localeCompare(b.id));
+      return item;
+    },
     /* ---------- 注册 ---------- */
     register(def) {
       const item = normalize(def);
@@ -57,6 +68,10 @@ window.NEG = window.NEG || {};
     list() {
       return tasks.slice();
     },
+    /* 只返回对外展示的模块(导航 / 首页入口用) */
+    visible() {
+      return tasks.filter((t) => !t.hidden);
+    },
     ids() {
       return tasks.map((t) => t.id);
     },
@@ -73,7 +88,7 @@ window.NEG = window.NEG || {};
     /* ---------- 生命周期 ---------- */
     mount(id, view, ctx) {
       const def = TM.get(id);
-      if (!def || !view) return null;
+      if (!def || !view || typeof def.render !== 'function') return null;
 
       TM.unmount();
       view.innerHTML = '';
@@ -90,6 +105,7 @@ window.NEG = window.NEG || {};
           '<p style="font-size:15px;color:var(--text);margin-bottom:6px">「' + def.title + '」加载失败</p>' +
           '<p style="font-size:12px;color:var(--text-3)">请刷新页面重试；如果问题持续出现，请查看控制台错误。</p>' +
           '</div>';
+        return null;
       }
 
       state.current = { def, cleanup: typeof cleanup === 'function' ? cleanup : null };
@@ -152,7 +168,7 @@ window.NEG = window.NEG || {};
     /** 全局统计：完成模块数 / 已体验数 / 平均进度 */
     stats(appState) {
       const s = appState || (NEG.store && NEG.store.get()) || {};
-      const labTasks = tasks.filter((t) => t.id !== 'home');
+      const labTasks = tasks.filter((t) => t.id !== 'home' && t.id !== 'main' && !t.hidden);
       let done = 0;
       let active = 0;
       let sum = 0;
